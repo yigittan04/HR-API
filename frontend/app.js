@@ -1,5 +1,5 @@
 const API_URL = "http://localhost:8000";
-const API_KEY = "***REMOVED***";
+const API_KEY = "REMOVED";
 const PAGE_SIZE = 5;
 
 let deptPage = 1;
