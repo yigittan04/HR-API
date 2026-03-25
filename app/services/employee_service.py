@@ -1,77 +1,48 @@
-from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
-from app.repositories.employee_repository import (
-    employee_repository,
-    list_employees as repo_list_employees,
-    get_employee_by_id
-)
-from app import schemas, models
-from app.config import MIN_SALARY
+from app.models import Employee, Department
+from app.repositories.employee_repository import employee_repository
 
+def list_employees(db: Session, skip=0, limit=10, min_salary=None, max_salary=None, department_id=None):
+    query = db.query(Employee)
+    if min_salary is not None:
+        query = query.filter(Employee.salary >= min_salary)
+    if max_salary is not None:
+        query = query.filter(Employee.salary <= max_salary)
+    if department_id is not None:
+        query = query.filter(Employee.department_id == department_id)
+    return query.offset(skip).limit(limit).all()
 
-def list_employees(
-    db: Session,
-    skip: int,
-    limit: int,
-    min_salary: float | None = None,
-    max_salary: float | None = None,
-    department_id: int | None = None
-):
-    if min_salary is None:
-        min_salary = MIN_SALARY
+def get_employee_by_email(db: Session, email: str):
+    return db.query(Employee).filter(Employee.email == email).first()
 
-    return repo_list_employees(db, skip, limit, min_salary, max_salary, department_id)
-
-def get_employee(db: Session, employee_id: int):
-    employee = get_employee_by_id(db, employee_id)
-    if not employee:
-        raise HTTPException(status_code=404, detail="Çalışan bulunamadı.")
-    return employee
-
-def create_employee(db: Session, employee: schemas.EmployeeCreateUI):
-    department = db.query(models.Department).filter(
-        models.Department.name == employee.department_name
-    ).first()
-    if not department:
-        raise HTTPException(status_code=400, detail="Department bulunamadı.")
-
-    employee_data = schemas.EmployeeCreate(
-        first_name=employee.first_name,
-        last_name=employee.last_name,
-        email=employee.email,
-        salary=employee.salary,
-        start_date=employee.start_date,
-        department_id=department.id
+def create(db: Session, employee_data):
+    dept = db.query(Department).filter(Department.id == employee_data.department_id).first()
+    if not dept:
+        raise ValueError("Invalid department ID")
+    db_employee = Employee(
+        first_name=employee_data.first_name,
+        last_name=employee_data.last_name,
+        email=employee_data.email,
+        salary=employee_data.salary,
+        start_date=employee_data.start_date,
+        department_id=employee_data.department_id
     )
+    db.add(db_employee)
+    db.commit()
+    db.refresh(db_employee)
+    return db_employee
 
-    try:
-        return employee_repository.create_employee(db, employee_data)
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=400, detail="Bu email zaten kayıtlı.")
+def get_by_id(db: Session, employee_id: int):
+    return employee_repository.get(db, employee_id)
 
-def update(db: Session, employee_id: int, employee: schemas.EmployeeCreateUI):
-    db_employee = get_employee(db, employee_id)
-
-    department = db.query(models.Department).filter(
-        models.Department.name == employee.department_name
-    ).first()
-    if not department:
-        raise HTTPException(status_code=400, detail="Department bulunamadı.")
-
-    employee_data = schemas.EmployeeCreate(
-        first_name=employee.first_name,
-        last_name=employee.last_name,
-        email=employee.email,
-        salary=employee.salary,
-        start_date=employee.start_date,
-        department_id=department.id
-    )
-
+def update(db: Session, employee_id: int, employee_data):
+    db_employee = employee_repository.get(db, employee_id)
+    if hasattr(employee_data, "department_id"):
+        dept = db.query(Department).filter(Department.id == employee_data.department_id).first()
+        if not dept:
+            raise ValueError("Invalid department ID")
     return employee_repository.update(db, db_employee, employee_data)
 
-
-def delete_employee(db: Session, employee_id: int):
-    db_employee = get_employee(db, employee_id)
-    employee_repository.delete_employee(db, db_employee)
+def delete(db: Session, employee_id: int):
+    db_employee = employee_repository.get(db, employee_id)
+    employee_repository.delete(db, db_employee)

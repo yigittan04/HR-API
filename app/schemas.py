@@ -32,8 +32,6 @@ class EmployeeResponse(EmployeeBase):
     class Config:
         from_attributes = True
 
-# Nested response structures
-# Nested response yapıları
 class DepartmentNested(BaseModel):
     id: int
     name: str
@@ -65,5 +63,4 @@ class EmployeeCreateUI(BaseModel):
     email: EmailStr
     salary: float = Field(..., ge=10000)
     start_date: date
-    department_name: str
-
+    department_id: int

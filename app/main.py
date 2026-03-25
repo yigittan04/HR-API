@@ -7,15 +7,17 @@ from sqlalchemy.exc import IntegrityError
 from app.database import engine, Base, wait_for_db
 from app import models
 from app.routers import departments, employees
+from app.config import settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-wait_for_db()
-
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
+
+@app.on_event("startup")
+def startup():
+    wait_for_db()
+    Base.metadata.create_all(bind=engine)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -40,6 +42,7 @@ app.add_middleware(
 
 @app.exception_handler(IntegrityError)
 async def integrity_exception_handler(request, exc):
+    logger.warning(f"Integrity error: {str(exc)}")
     return JSONResponse(
         status_code=400,
         content={"detail": "Veri bütünlüğü hatası."},
@@ -47,8 +50,8 @@ async def integrity_exception_handler(request, exc):
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled error occurred: {str(exc)}")
-
+    import traceback
+    logger.error(f"Unhandled error: {exc}\n{traceback.format_exc()}")
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error"}

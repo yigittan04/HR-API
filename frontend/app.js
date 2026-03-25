@@ -71,10 +71,10 @@ async function populateDepartmentDropdown() {
 
         depts.forEach(d => {
             const option = document.createElement("option");
-            option.value = d.name;
+            option.value = d.id;
             option.textContent = d.name;
             select.appendChild(option);
-            deptMap[d.name] = d.name;
+            deptMap[d.id] = d.name;
         });
     } catch (err) {
         console.error("Dropdown hatası:", err);
@@ -128,8 +128,8 @@ async function loadEmployees() {
 
         emps.forEach(emp => {
             let deptOptions = "";
-            for (const name of Object.values(deptMap)) {
-                deptOptions += `<option value="${name}" ${name === emp.department_name ? "selected" : ""}>${name}</option>`;
+            for (const [id, name] of Object.entries(deptMap)) {
+                deptOptions += `<option value="${id}" ${id == emp.department_id ? "selected" : ""}>${name}</option>`;
             }
 
             const empRow = document.createElement("tr");
@@ -170,9 +170,9 @@ async function updateEmployee(id) {
         const email = document.getElementById(`emp-email-${id}`).value;
         const salary = parseFloat(document.getElementById(`emp-salary-${id}`).value);
         const start_date = document.getElementById(`emp-date-${id}`).value;
-        const dept_name = document.getElementById(`emp-dept-${id}`).value;
+        const department_id = parseInt(document.getElementById(`emp-dept-${id}`).value);
 
-        if (!first_name || !email || isNaN(salary) || !last_name || !dept_name || !start_date)
+        if (!first_name || !email || isNaN(salary) || !last_name || department_id === null || isNaN(department_id) || !start_date)
             return alert("Bütün bilgilerin girilmesi gerekir!");
 
         if (!/^\S+@\S+\.\S+$/.test(email))
@@ -187,7 +187,7 @@ async function updateEmployee(id) {
                 email,
                 salary,
                 start_date,
-                department_name: dept_name
+                department_id: department_id
             })
         });
 
@@ -240,10 +240,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const last_name = document.getElementById("empLastName").value;
         const email = document.getElementById("empEmail").value;
         const salary = parseFloat(document.getElementById("empSalary").value);
-        const dept_name = document.getElementById("empDept").value;
+        const department_id = parseInt(document.getElementById("empDept").value);
         const start_date = document.getElementById("empDate").value;
 
-        if (!first_name || !email || isNaN(salary) || !dept_name || !last_name || !start_date)
+        if (!first_name || !email || isNaN(salary) || !last_name || department_id === null || isNaN(department_id) || !start_date)
             return alert("Eksik bilgi!");
 
         if (salary < 10000) return alert("Mümkün olmayan maaş değeri!");
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 email,
                 salary,
                 start_date,
-                department_name: dept_name
+                department_id: department_id
             })
         });
 

@@ -3,13 +3,12 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.dependencies import get_db, verify_api_key
 from app.services import employee_service
-from app.repositories import employee_repository
 
 router = APIRouter(prefix="/employees", tags=["Employees"])
 
 @router.post("", response_model=schemas.EmployeeResponse, status_code=201, dependencies=[Depends(verify_api_key)])
-def create_employee(employee: schemas.EmployeeCreateUI, db: Session = Depends(get_db)):
-    return employee_service.create_employee(db, employee)
+def create(employee: schemas.EmployeeCreateUI, db: Session = Depends(get_db)):
+    return employee_service.create(db, employee)
 
 @router.get(
     "",
@@ -24,7 +23,6 @@ def list_employees(
     limit: int = 10,
     db: Session = Depends(get_db)
 ):
-
     return employee_service.list_employees(
         db,
         skip,
@@ -34,10 +32,9 @@ def list_employees(
         department_id
     )
 
-
 @router.get("/{employee_id}", response_model=schemas.EmployeeWithDepartmentInfo)
 def get_employee(employee_id: int, db: Session = Depends(get_db)):
-    return employee_service.get_employee(db, employee_id)
+    return employee_service.get(db, employee_id)
 
 @router.put("/{employee_id}", response_model=schemas.EmployeeResponse, dependencies=[Depends(verify_api_key)])
 def update(employee_id: int, employee: schemas.EmployeeCreateUI, db: Session = Depends(get_db)):
@@ -48,5 +45,5 @@ def update(employee_id: int, employee: schemas.EmployeeCreateUI, db: Session = D
     status_code=204,
     dependencies=[Depends(verify_api_key)]
 )
-def delete_employee(employee_id: int, db: Session = Depends(get_db)):
-    employee_service.delete_employee(db, employee_id)
+def delete(employee_id: int, db: Session = Depends(get_db)):
+    employee_service.delete(db, employee_id)

@@ -5,6 +5,7 @@ Database: PostgreSQL
 ORM: SQLAlchemy  
 Frontend: HTML, CSS, JavaScript  
 Containerization: Docker  
+Testing: Pytest, HTTPX
 
 # How to Run the HR API (English)
 
@@ -65,6 +66,11 @@ hr_api
 │ ├── favicon.png
 │ ├── index.html
 │ └── style.css
+│
+├── tests
+│ ├── test_departments.py
+│ ├── test_employees.py
+│ └── conftest.py
 ```
 
 # Code Structure
@@ -86,6 +92,17 @@ Repositories (Database Access)
         ▼
 Database (PostgreSQL)
 ```
+
+# Unit Testing
+
+Pytest is used for unit testing.
+Each test uses a fresh database session to ensure isolation.
+Tests cover creating, updating, and deleting departments and employees, verifying that the API and database logic works as intended.
+
+To run the tests, use the following commands:
+
+> docker exec -it hr_api bash
+> python3 -m pytest -v
 
 ## Routers
 
@@ -186,6 +203,11 @@ hr_api
 │ ├── favicon.png
 │ ├── index.html
 │ └── style.css
+│
+├── tests
+│ ├── test_departments.py
+│ ├── test_employees.py
+│ └── conftest.py
 ```
 
 # Kod Mimarisi
@@ -205,6 +227,17 @@ Repositories (Database Access)
         ▼
 Database (PostgreSQL)
 ```
+
+# Birim Test
+
+Projede birim test için Pytest kullanılır.
+Her test, izole bir ortam sağlamak için yeni bir veritabanı oturumu kullanır.
+Testler, departman ve çalışan ekleme, güncelleme ve silme eylemlerini kapsar ve API ile veritabanı mantığını doğrular.
+
+Testleri çalıştırmak için aşağıdaki komutları kullanın:
+
+> docker exec -it hr_api bash
+> python3 -m pytest -v
 
 ## Router'lar
 
