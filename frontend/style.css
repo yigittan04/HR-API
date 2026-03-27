@@ -87,3 +87,79 @@ table td {
     display: flex;
     gap: 10px;
 }
+
+/* Affects only the login page */
+#login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    width: 350px;
+    text-align: center;
+    margin: auto;
+}
+
+body.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #a661ef, #5a93f5);
+    padding: 0;
+}
+
+#login-container h1 {
+    color: #e74c3c;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+#login-container input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    outline: none;
+    transition: 0.3s;
+}
+
+#login-container input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52,152,219,0.5);
+}
+
+#login-container button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#login-container button:hover {
+    background-color: #c0392b;
+}
+
+#login-container #error {
+    color: #e74c3c;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+@media (max-width: 400px) {
+    #login-container {
+        width: 90%;
+        padding: 30px 20px;
+    }
+}

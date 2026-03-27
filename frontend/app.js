@@ -1,5 +1,5 @@
-const API_URL = "http://localhost:8000";
-const API_KEY = "REMOVED";
+const API_URL = "https://hr-api-qsd4.onrender.com";
+const API_KEY = "REMOVED_KEY";
 const PAGE_SIZE = 5;
 
 let deptPage = 1;
@@ -7,14 +7,24 @@ let empPage = 1;
 
 let deptMap = {};
 
+if (!localStorage.getItem("token")) {
+    window.location.href = "login.html";
+}
+
 function showLoading(id, show) {
     document.getElementById(id).style.display = show ? "block" : "none";
 }
 
 async function safeFetch(url, options = {}) {
     options.headers = options.headers || {};
-    options.headers["x-api-key"] = API_KEY;
 
+    const token = localStorage.getItem("token");
+    if (token) {
+        options.headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    options.headers["x-api-key"] = API_KEY;
+    
     const res = await fetch(url, options);
 
     if (!res.ok) {

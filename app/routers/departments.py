@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app import schemas
-from app.dependencies import get_db, verify_api_key
+from app.dependencies import get_db, verify_api_key, get_current_user
 from app.services import department_service
 import logging
 
@@ -17,6 +17,7 @@ router = APIRouter(prefix="/departments", tags=["Departments"])
     dependencies=[Depends(verify_api_key)]
 )
 def create_department(department: schemas.DepartmentCreate, db: Session = Depends(get_db)):
+    current_user: dict = Depends(get_current_user)
     return department_service.create_department(db, department)
 
 
@@ -25,16 +26,24 @@ def create_department(department: schemas.DepartmentCreate, db: Session = Depend
     response_model=list[schemas.DepartmentResponse],
     dependencies=[Depends(verify_api_key)]
 )
-def list_departments(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def list_departments(
+    skip: int = 0,
+    limit: int = 10,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
     return department_service.list_departments(db, skip, limit)
-
 
 @router.get(
     "/{department_id}",
     response_model=schemas.DepartmentWithEmployeeInfo,
     dependencies=[Depends(verify_api_key)]
 )
-def get_department(department_id: int, db: Session = Depends(get_db)):
+def get_department(
+    department_id: int, 
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
     return department_service.get_department(db, department_id)
 
 
@@ -43,7 +52,12 @@ def get_department(department_id: int, db: Session = Depends(get_db)):
     response_model=schemas.DepartmentResponse,
     dependencies=[Depends(verify_api_key)]
 )
-def update_department(department_id: int, department: schemas.DepartmentCreate, db: Session = Depends(get_db)):
+def update_department(
+    department_id: int,
+    department: schemas.DepartmentCreate,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
     return department_service.update_department(db, department_id, department)
 
 
@@ -52,5 +66,9 @@ def update_department(department_id: int, department: schemas.DepartmentCreate, 
     status_code=204,
     dependencies=[Depends(verify_api_key)]
 )
-def delete_department(department_id: int, db: Session = Depends(get_db)):
+def delete_department(
+    department_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
     department_service.delete_department(db, department_id)
