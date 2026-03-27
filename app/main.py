@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import IntegrityError
 from app.database import engine, Base, wait_for_db
 from app import models
-from app.routers import departments, employees
+from app.routers import departments, employees, auth
 from app.config import settings
 
 logging.basicConfig(level=logging.INFO)
@@ -61,5 +61,6 @@ async def global_exception_handler(request: Request, exc: Exception):
 def read_root():
     return {"message": "HR API is running"}
 
+app.include_router(auth.router)
 app.include_router(departments.router)
 app.include_router(employees.router)

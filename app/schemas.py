@@ -64,3 +64,17 @@ class EmployeeCreateUI(BaseModel):
     salary: float = Field(..., ge=10000)
     start_date: date
     department_id: int
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str | None = None
+
+class User(BaseModel):
+    username: str
+    password: str
+
+class UserInDB(User):
+    hashed_password: str
