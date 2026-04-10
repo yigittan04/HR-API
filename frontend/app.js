@@ -23,13 +23,13 @@ async function safeFetch(url, options = {}) {
         options.headers["Authorization"] = `Bearer ${token}`;
     }
 
-    options.headers["x-api-key"] = API_KEY;
-    
+    options.headers["Content-Type"] = "application/json";
+
     const res = await fetch(url, options);
 
     if (!res.ok) {
         const text = await res.text();
-        throw new Error(text || "İstek yerine getirilemedi!");
+        throw new Error(text || "Request failed!");
     }
 
     return res.json().catch(() => null);
