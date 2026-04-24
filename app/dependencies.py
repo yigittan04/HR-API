@@ -18,9 +18,10 @@ def get_db():
     finally:
         db.close()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
+    print("Received token:", token)
     credentials_exception = HTTPException(
         status_code=401, detail="Invalid token", headers={"WWW-Authenticate": "Bearer"}
     )
@@ -30,5 +31,6 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         if username is None:
             raise credentials_exception
         return {"username": username}
-    except JWTError:
+    except JWTError as e:
+        print("JWT ERROR:", str(e))
         raise credentials_exception
