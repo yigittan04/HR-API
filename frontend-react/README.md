@@ -1,16 +1,20 @@
-# React + Vite
+# React + Vite Update
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## New Endpoint Parametres
+| Parameter       | Type     Description |
+|-----------------|---------|------------|
+| page            | int     | Page number |
+| pageSize        | int     | Number of records per page |
+| search          | string  | Searches by employee name |
+| department_id   | int     | Filters employees by specific department |
 
-Currently, two official plugins are available:
+## Technical Details
+This endpoint supports server-side pagination, searching, and filtering.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Pagination is handled using `page` and `pageSize` parameters.
+- Search function uses SQL `LIKE` query on employee fields.
+- Department filtering is applied using `department_id`.
+- All filters are combined dynamically in the backend query.
+- The response includes:
+  - `data`: list of employees
+  - `total`: total number of matching records (used for pagination below)

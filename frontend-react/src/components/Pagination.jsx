@@ -1,0 +1,1 @@
+<Pagination page={page} setPage={setPage} total={total} pageSize={pageSize} />

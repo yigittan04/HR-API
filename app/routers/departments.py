@@ -16,14 +16,18 @@ def create_department(
     return department_service.create_department(db, department)
 
 
-@router.get("", response_model=list[schemas.DepartmentResponse])
+@router.get("", response_model=schemas.DepartmentListResponse)
 def list_departments(
-    skip: int = 0,
-    limit: int = 10,
+    page: int = 1,
+    pageSize: int = 10,
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
-    return department_service.list_departments(db, skip, limit)
+    return department_service.list_departments(
+        db=db,
+        page=page,
+        page_size=pageSize
+    )
 
 
 @router.get("/{department_id}", response_model=schemas.DepartmentWithEmployeeInfo)

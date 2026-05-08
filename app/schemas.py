@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pydantic import BaseModel, EmailStr, Field
 from datetime import date
 from typing import List, Optional
@@ -14,6 +15,18 @@ class DepartmentResponse(DepartmentBase):
 
     class Config:
         from_attributes = True
+
+class EmployeeListResponse(BaseModel):
+    data: list[EmployeeResponse]
+    total: int
+    page: int
+    pageSize: int
+
+class DepartmentListResponse(BaseModel):
+    data: list[DepartmentResponse]
+    total: int
+    page: int
+    pageSize: int
 
 class EmployeeBase(BaseModel):
     first_name: str

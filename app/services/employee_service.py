@@ -1,16 +1,35 @@
 from sqlalchemy.orm import Session
 from app.models import Employee, Department
 from app.repositories.employee_repository import employee_repository
+from sqlalchemy import or_
 
-def list_employees(db: Session, skip=0, limit=10, min_salary=None, max_salary=None, department_id=None):
+def list_employees(db: Session, page: int, page_size: int, search: str | None, department_id: int | None):
     query = db.query(Employee)
-    if min_salary is not None:
-        query = query.filter(Employee.salary >= min_salary)
-    if max_salary is not None:
-        query = query.filter(Employee.salary <= max_salary)
-    if department_id is not None:
+
+    if search:
+        search_term = f"%{search}%"
+        query = query.filter(
+            or_(
+                Employee.first_name.ilike(search_term),
+                Employee.last_name.ilike(search_term),
+                Employee.email.ilike(search_term)
+            )
+        )
+
+    if department_id:
         query = query.filter(Employee.department_id == department_id)
-    return query.offset(skip).limit(limit).all()
+
+    total = query.count()
+
+    offset = (page - 1) * page_size
+    employees = query.offset(offset).limit(page_size).all()
+
+    return {
+        "data": employees,
+        "total": total,
+        "page": page,
+        "pageSize": page_size
+    }
 
 def get_employee_by_email(db: Session, email: str):
     return db.query(Employee).filter(Employee.email == email).first()

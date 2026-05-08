@@ -15,18 +15,21 @@ def create(
     return employee_service.create(db, employee)
 
 
-@router.get("", response_model=list[schemas.EmployeeResponse])
+@router.get("", response_model=schemas.EmployeeListResponse)
 def list_employees(
-    min_salary: float | None = None,
-    max_salary: float | None = None,
+    page: int = 1,
+    pageSize: int = 10,
+    search: str | None = None,
     department_id: int | None = None,
-    skip: int = 0,
-    limit: int = 10,
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
     return employee_service.list_employees(
-        db, skip, limit, min_salary, max_salary, department_id
+        db=db,
+        page=page,
+        page_size=pageSize,
+        search=search,
+        department_id=department_id
     )
 
 

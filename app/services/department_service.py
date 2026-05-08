@@ -1,13 +1,25 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.repositories.department_repository import department_repository
-from app import models
+from app.models import Department
 
 def create_department(db: Session, department):
     return department_repository.create(db, department)
 
-def list_departments(db: Session, skip: int = 0, limit: int = 10):
-    return department_repository.list(db, skip, limit)
+def list_departments(db: Session, page: int, page_size: int):
+    query = db.query(Department)
+
+    total = query.count()
+
+    offset = (page - 1) * page_size
+    departments = query.offset(offset).limit(page_size).all()
+
+    return {
+        "data": departments,
+        "total": total,
+        "page": page,
+        "pageSize": page_size
+    }
 
 def get_department(db: Session, department_id: int):
     dept = department_repository.get(db, department_id)
