@@ -1,14 +1,6 @@
 # React + Vite Update
 
-## New Endpoint Parametres
-| Parameter       | Type     Description |
-|-----------------|---------|------------|
-| page            | int     | Page number |
-| pageSize        | int     | Number of records per page |
-| search          | string  | Searches by employee name |
-| department_id   | int     | Filters employees by specific department |
-
-## Technical Details
+## New Endpoint Parametres and Technical Details
 This endpoint supports server-side pagination, searching, and filtering.
 
 - Pagination is handled using `page` and `pageSize` parameters.
