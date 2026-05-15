@@ -6,8 +6,9 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    username = Column(String, unique=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
+    role = Column(String, nullable=False)
 
 class Department(Base):
     __tablename__ = "departments"
@@ -17,7 +18,6 @@ class Department(Base):
     location = Column(String, nullable=False)
 
     employees = relationship("Employee", back_populates="department")
-
 
 class Employee(Base):
     __tablename__ = "employees"
