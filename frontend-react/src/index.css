@@ -7,7 +7,7 @@
 body {
   background: #f1f5f9;
   font-family: Arial, sans-serif;
-  color: #1e293b;
+  color: #000000;
 }
 
 .page {
@@ -89,7 +89,7 @@ button:hover {
 }
 
 .nav-btn {
-  background: #0f172a;
+  background: #843063;
   color: white;
 }
 

@@ -28,7 +28,9 @@ Docker must be installed before running the project.
 Use the following commands:
 
 > sudo apt update
+
 > sudo apt install -y docker.io docker-compose
+
 > sudo systemctl enable --now docker
 
 Run this command in the project folder:
@@ -156,6 +158,7 @@ Tests cover creating, updating, and deleting departments and employees, verifyin
 To run the tests, use the following commands:
 
 > docker exec -it hr_api bash
+
 > python3 -m pytest -v
 
 ---
@@ -221,7 +224,9 @@ Projeyi çalıştırmadan önce Docker'ın yüklü olması gerekmektedir.
 Docker'ı yüklemek için aşağıdaki komutları kullanabilirsiniz:
 
 > sudo apt update
+
 > sudo apt install -y docker.io docker-compose
+
 > sudo systemctl enable --now docker
 
 Proje klasörünün içinde aşağıdaki komutu çalıştırın:
@@ -342,6 +347,7 @@ Testler, departman ve çalışan ekleme, güncelleme ve silme eylemlerini kapsar
 Testleri çalıştırmak için aşağıdaki komutları kullanın:
 
 > docker exec -it hr_api bash
+
 > python3 -m pytest -v
 
 ---
