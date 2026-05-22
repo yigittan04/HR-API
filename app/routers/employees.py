@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.dependencies import get_db, get_current_user
 from app.services import employee_service
+from app.models import User
+from app.dependencies import require_admin
 
 router = APIRouter(prefix="/employees", tags=["Employees"])
 
@@ -10,7 +12,7 @@ router = APIRouter(prefix="/employees", tags=["Employees"])
 def create(
     employee: schemas.EmployeeCreateUI,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(require_admin)
 ):
     return employee_service.create(db, employee)
 
@@ -22,7 +24,7 @@ def list_employees(
     search: str | None = None,
     department_id: int | None = None,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     return employee_service.list_employees(
         db=db,
@@ -37,7 +39,7 @@ def list_employees(
 def get_employee(
     employee_id: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     return employee_service.get(db, employee_id)
 
@@ -47,7 +49,7 @@ def update(
     employee_id: int,
     employee: schemas.EmployeeCreateUI,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(require_admin)
 ):
     return employee_service.update(db, employee_id, employee)
 
@@ -56,6 +58,6 @@ def update(
 def delete(
     employee_id: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(require_admin)
 ):
     employee_service.delete(db, employee_id)

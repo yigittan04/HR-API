@@ -7,7 +7,7 @@ import {
 } from "../services/employeeService";
 import { getDepartments } from "../services/departmentService";
 
-function EmployeeTable() {
+function EmployeeTable({ role }) {
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
 
@@ -133,72 +133,74 @@ function EmployeeTable() {
         </select>
       </div>
 
-      <div className="card">
-        <input
-          placeholder="First Name"
-          value={form.first_name}
-          onChange={(e) =>
-            setForm({ ...form, first_name: e.target.value })
-          }
-        />
+      {role === "admin" && (
+        <div className="card">
+          <input
+            placeholder="First Name"
+            value={form.first_name}
+            onChange={(e) =>
+              setForm({ ...form, first_name: e.target.value })
+            }
+          />
 
-        <input
-          placeholder="Last Name"
-          value={form.last_name}
-          onChange={(e) =>
-            setForm({ ...form, last_name: e.target.value })
-          }
-        />
+          <input
+            placeholder="Last Name"
+            value={form.last_name}
+            onChange={(e) =>
+              setForm({ ...form, last_name: e.target.value })
+            }
+          />
 
-        <input
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) =>
-            setForm({ ...form, email: e.target.value })
-          }
-        />
+          <input
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+          />
 
-        <input
-          placeholder="Salary"
-          type="number"
-          value={form.salary}
-          onChange={(e) =>
-            setForm({ ...form, salary: e.target.value })
-          }
-        />
+          <input
+            placeholder="Salary"
+            type="number"
+            value={form.salary}
+            onChange={(e) =>
+              setForm({ ...form, salary: e.target.value })
+            }
+          />
 
-        <input
-          type="date"
-          value={form.start_date}
-          onChange={(e) =>
-            setForm({ ...form, start_date: e.target.value })
-          }
-        />
+          <input
+            type="date"
+            value={form.start_date}
+            onChange={(e) =>
+              setForm({ ...form, start_date: e.target.value })
+            }
+          />
 
-        <select
-          value={form.department_id}
-          onChange={(e) =>
-            setForm({ ...form, department_id: e.target.value })
-          }
-        >
-          <option value="">Select Department</option>
-          {departments.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.name}
-            </option>
-          ))}
-        </select>
+          <select
+            value={form.department_id}
+            onChange={(e) =>
+              setForm({ ...form, department_id: e.target.value })
+            }
+          >
+            <option value="">Select Department</option>
+            {departments.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
 
-        <button onClick={handleSave} className="primary-btn">
-          {editingId ? "Update" : "Add"}
-        </button>
-
-        {editingId && (
-          <button onClick={resetForm} className="secondary-btn">
-            Cancel
+          <button onClick={handleSave} className="primary-btn">
+            {editingId ? "Update" : "Add"}
           </button>
-        )}
-      </div>
+
+          {editingId && (
+            <button onClick={resetForm} className="secondary-btn">
+              Cancel
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="card">
         {employees.length === 0 ? (
@@ -215,12 +217,14 @@ function EmployeeTable() {
 
               <div>${e.salary}</div>
 
-              <div className="actions">
-                <button className="edit-btn" onClick={() => handleEdit(e)}>Edit</button>
-                <button className="delete-btn" onClick={() => handleDelete(e.id)}>
-                  Delete
-                </button>
-              </div>
+              {role === "admin" && (
+                <div className="actions">
+                  <button className="edit-btn" onClick={() => handleEdit(e)}>Edit</button>
+                  <button className="delete-btn" onClick={() => handleDelete(e.id)}>
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}

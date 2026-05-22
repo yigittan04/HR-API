@@ -7,7 +7,7 @@ import {
   deleteDepartment,
 } from "../services/departmentService";
 
-function DepartmentTable() {
+function DepartmentTable({ role }) {
   const [departments, setDepartments] = useState([]);
 
   const [form, setForm] = useState({
@@ -73,55 +73,57 @@ function DepartmentTable() {
       <div className="container">
         <h1 className="title">Departments</h1>
 
-        <div className="card">
-          <div className="form-grid">
-            <input
-              placeholder="Department Name"
-              value={form.name}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  name: e.target.value,
-                })
-              }
-            />
+        {role === "admin" && (
+          <div className="card">
+            <div className="form-grid">
+              <input
+                placeholder="Department Name"
+                value={form.name}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    name: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              placeholder="Location"
-              value={form.location}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  location: e.target.value,
-                })
-              }
-            />
-          </div>
+              <input
+                placeholder="Location"
+                value={form.location}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    location: e.target.value,
+                  })
+                }
+              />
+            </div>
 
-          <div
-            style={{
-              marginTop: 16,
-              display: "flex",
-              gap: 10,
-            }}
-          >
-            <button
-              className="primary-btn"
-              onClick={handleSave}
+            <div
+              style={{
+                marginTop: 16,
+                display: "flex",
+                gap: 10,
+              }}
             >
-              {editingId ? "Update" : "Add"}
-            </button>
-
-            {editingId && (
               <button
-                className="secondary-btn"
-                onClick={resetForm}
+                className="primary-btn"
+                onClick={handleSave}
               >
-                Cancel
+                {editingId ? "Update" : "Add"}
               </button>
-            )}
+
+              {editingId && (
+                <button
+                  className="secondary-btn"
+                  onClick={resetForm}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="card">
           <table className="table">
@@ -129,7 +131,7 @@ function DepartmentTable() {
               <tr>
                 <th>Name</th>
                 <th>Location</th>
-                <th>Actions</th>
+                {role === "admin" && <th>Actions</th>}
               </tr>
             </thead>
 
@@ -141,25 +143,27 @@ function DepartmentTable() {
                   <td>{dep.location}</td>
 
                   <td>
-                    <div className="actions">
-                      <button
-                        className="edit-btn"
-                        onClick={() =>
-                          handleEdit(dep)
-                        }
-                      >
-                        Edit
-                      </button>
+                    {role === "admin" && (
+                      <div className="actions">
+                        <button
+                          className="edit-btn"
+                          onClick={() =>
+                            handleEdit(dep)
+                          }
+                        >
+                          Edit
+                        </button>
 
-                      <button
-                        className="delete-btn"
-                        onClick={() =>
-                          handleDelete(dep.id)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </div>
+                        <button
+                          className="delete-btn"
+                          onClick={() =>
+                            handleDelete(dep.id)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}

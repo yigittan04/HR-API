@@ -7,7 +7,7 @@ function Dashboard({ onLogout }) {
     <div className="page">
       <div className="container">
         <div className="card">
-          <h1 className="title">Dashboard</h1>
+          <h1 className="title">Home</h1>
 
           <div className="dashboard-buttons">
             <button

@@ -26,12 +26,12 @@ function Login({ onLogin }) {
         }
       );
 
-      localStorage.setItem(
-        "token",
-        res.data.access_token
-      );
+      localStorage.setItem("token", res.data.access_token);
+      localStorage.setItem("role", res.data.role);
 
-      onLogin();
+      onLogin(res.data.role);
+
+      console.log(res.data);
 
       navigate("/dashboard");
 

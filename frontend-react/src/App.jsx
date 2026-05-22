@@ -8,21 +8,27 @@ import DepartmentTable from "./components/DepartmentTable";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const savedRole = localStorage.getItem("role");
     setIsLoggedIn(!!token);
+    setRole(savedRole || "");
   }, []);
 
-  const login = () => {
+  const login = (userRole) => {
     setIsLoggedIn(true);
+    setRole(userRole);
     navigate("/dashboard");
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setIsLoggedIn(false);
+    setRole("");
     navigate("/");
   };
 
@@ -47,7 +53,7 @@ function App() {
         path="/employees"
         element={
           <PrivateRoute>
-            <EmployeeTable />
+            <EmployeeTable role={role} />
           </PrivateRoute>
         }
       />
@@ -56,7 +62,7 @@ function App() {
         path="/departments"
         element={
           <PrivateRoute>
-            <DepartmentTable />
+            <DepartmentTable role={role} />
           </PrivateRoute>
         }
       />
