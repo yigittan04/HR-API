@@ -7,6 +7,17 @@ Frontend: HTML, CSS, JavaScript
 Containerization: Docker  
 Testing: Pytest, HTTPX
 
+# Features
+
+- JWT-based authentication
+- Access control according to roles (admin, user)
+- Department management (create, update, delete, view)
+- Employee management (create, update, delete, view)
+- Search and filtering (employees & departments)
+- Pagination support
+- Real-time UI updates
+- RESTful API architecture
+
 # How to Run the HR API (English)
 
 Docker must be installed before running the project.
@@ -19,17 +30,20 @@ Use the following commands:
 Run this command in the project folder:
 > docker compose up --build
 
-After opening the UI at http://localhost:3000, you can use the following features:
+After opening the UI at http://localhost:5173, you can use the following features:
 
-User is able to add, update and delete department/employee information.
+Admins are able to add, update and delete department/employee information.
+Users are able to view information.
 
 - Department Management
-    - The user can change the name and location of the department.
+    - The admin can change the name and location of the department.
+    - The user can view departments page by page.
 
 - Employee Management
-    - User is able to change the name, surname, salary, email, start date and the department the employee works in.
-    - The user can select a department from a dropdown menu.
-    - User can select a start date from the calendar.
+    - Admin is able to change the name, surname, salary, email, start date and the department the employee works in.
+    - Dropdown menu is available for the department selection.
+    - Start date can be selected from the calendar.
+    - Both admins and users can see employee information and search by their name, surname or email addresses.
 
 All changes are automatically saved to the database, and the UI updates in real-time.
 
@@ -40,42 +54,72 @@ Use the following command to stop the project:
 
 ```
 hr_api
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+├── replacements.txt
+├── requirements.txt
 ├── app
-│ ├── config.py
-│ ├── database.py
-│ ├── dependencies.py
-│ ├── main.py
-│ ├── models.py
-│ ├── repositories
-│ │ ├── __init__.py
-│ │ ├── base_repository.py
-│ │ ├── department_repository.py
-│ │ └── employee_repository.py
-│ ├── routers
-│ │ ├── departments.py
-│ │ └── employees.py
-│ ├── schemas.py
-│ └── services
-│   ├── __init__.py
-│   ├── department_service.py
-│   └── employee_service.py
-│
+│   ├── config.py
+│   ├── database.py
+│   ├── dependencies.py
+│   ├── main.py
+│   ├── models.py
+│   ├── schemas.py
+│   ├── auth_utils.py
+│   ├── repositories
+│   │   ├── users.py
+│   │   ├── base_repository.py
+│   │   ├── department_repository.py
+│   │   └── employee_repository.py
+│   ├── routers
+│   │   ├── departments.py
+│   │   ├── auth.py
+│   │   └── employees.py
+│   └── services
+│       ├── auth.py
+│       ├── department_service.py
+│       └── employee_service.py
 ├── frontend
-│ ├── Dockerfile
-│ ├── app.js
-│ ├── favicon.png
-│ ├── index.html
-│ └── style.css
-│
-├── tests
-│ ├── test_departments.py
-│ ├── test_employees.py
-│ └── conftest.py
+│   ├── Dockerfile
+│   ├── app.js
+│   ├── favicon.png
+│   ├── login.html
+│   ├── index.html
+│   └── style.css
+├── frontend-react
+│   ├── README.md
+│   ├── index.html
+│   └── src
+│       ├── App.css
+│       ├── App.jsx
+│       ├── main.jsx
+│       ├── index.css
+│       ├── components
+│       │   ├── DepartmentTable.jsx
+│       │   ├── EmployeeTable.jsx
+│       │   └── Pagination.jsx
+│       ├── pages
+│       │   ├── Dashboard.jsx
+│       │   └── Login.jsx
+│       └── services
+│           ├── api.js
+│           ├── departmentService.js
+│           └── employeeService.js
+└── tests
+    ├── test_departments.py
+    ├── test_employees.py
+    └── conftest.py
 ```
 
-# Code Structure
+# System Structure
 
 The backend follows a layered architecture to separate responsibilities and keep the code maintainable and scalable.
+The system uses JWT (JSON Web Token) authentication.
+If credentials are correct:
+   - A JWT token is generated
+   - The user role (admin/user) is stored
+   - You are redirected to the dashboard
 
 ```
 Client (Frontend)
@@ -156,17 +200,20 @@ Docker'ı yüklemek için aşağıdaki komutları kullanabilirsiniz:
 Proje klasörünün içinde aşağıdaki komutu çalıştırın:
 > docker compose up --build
 
-Arayüzü http://localhost:3000 adresinde açtıktan sonra aşağıdaki özellikleri kullanabilirsiniz:
+Arayüzü http://localhost:5173 adresinde açtıktan sonra aşağıdaki özellikleri kullanabilirsiniz:
 
-Kullanıcı sistemde departman ve çalışan bilgilerini ekleyebilir, güncelleyebilir ve silebilir.
+Admin sistemde departman ve çalışan bilgilerini ekleyebilir, güncelleyebilir ve silebilir.
+Kullanıcılar varolan bilgileri inceleyebilir.
 
 - Departman Yönetimi
-    - Kullanıcı departmanın adını ve konumunu değiştirebilir.
+    - Admin departmanın adını ve konumunu değiştirebilir.
+    - Kullanıcı sayfalara göre departmanları inceleyebilir.
 
 - Çalışan Yönetimi
-    - Kullanıcı çalışanın adını, soyadını, maaşını, e-postasını, işe başlama tarihini ve çalıştığı departmanı değiştirebilir.
+    - Admin çalışanın adını, soyadını, maaşını, e-postasını, işe başlama tarihini ve çalıştığı departmanı değiştirebilir.
     - Kullanıcı açılır menüden (dropdown) bir departman seçebilir.
     - Kullanıcı takvimden bir işe başlama tarihi seçebilir.
+    - Hem admin hem kullanıcı çalışan bilgilerini görüp ad, soyad veya email adresine göre arama yapabilir.
 
 Yapılan tüm değişiklikler otomatik olarak veritabanına kaydedilir ve arayüz gerçek zamanlı olarak güncellenir.
 
@@ -177,40 +224,65 @@ Projeyi durdurmak için aşağıdaki komutu kullanabilirsiniz:
 
 ```
 hr_api
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+├── replacements.txt
+├── requirements.txt
 ├── app
-│ ├── config.py
-│ ├── database.py
-│ ├── dependencies.py
-│ ├── main.py
-│ ├── models.py
-│ ├── repositories
-│ │ ├── __init__.py
-│ │ ├── base_repository.py
-│ │ ├── department_repository.py
-│ │ └── employee_repository.py
-│ ├── routers
-│ │ ├── departments.py
-│ │ └── employees.py
-│ ├── schemas.py
-│ └── services
-│   ├── __init__.py
-│   ├── department_service.py
-│   └── employee_service.py
-│
+│   ├── config.py
+│   ├── database.py
+│   ├── dependencies.py
+│   ├── main.py
+│   ├── models.py
+│   ├── schemas.py
+│   ├── auth_utils.py
+│   ├── repositories
+│   │   ├── users.py
+│   │   ├── base_repository.py
+│   │   ├── department_repository.py
+│   │   └── employee_repository.py
+│   ├── routers
+│   │   ├── departments.py
+│   │   ├── auth.py
+│   │   └── employees.py
+│   └── services
+│       ├── auth.py
+│       ├── department_service.py
+│       └── employee_service.py
 ├── frontend
-│ ├── Dockerfile
-│ ├── app.js
-│ ├── favicon.png
-│ ├── index.html
-│ └── style.css
-│
-├── tests
-│ ├── test_departments.py
-│ ├── test_employees.py
-│ └── conftest.py
+│   ├── Dockerfile
+│   ├── app.js
+│   ├── favicon.png
+│   ├── login.html
+│   ├── index.html
+│   └── style.css
+├── frontend-react
+│   ├── README.md
+│   ├── index.html
+│   └── src
+│       ├── App.css
+│       ├── App.jsx
+│       ├── main.jsx
+│       ├── index.css
+│       ├── components
+│       │   ├── DepartmentTable.jsx
+│       │   ├── EmployeeTable.jsx
+│       │   └── Pagination.jsx
+│       ├── pages
+│       │   ├── Dashboard.jsx
+│       │   └── Login.jsx
+│       └── services
+│           ├── api.js
+│           ├── departmentService.js
+│           └── employeeService.js
+└── tests
+    ├── test_departments.py
+    ├── test_employees.py
+    └── conftest.py
 ```
 
-# Kod Mimarisi
+# Sistem Mimarisi
 
 ```
 Client (Frontend)
