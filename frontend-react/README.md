@@ -58,6 +58,7 @@ http://localhost:5173
 
 # Project Structure
 
+```
 src
 ├── components
 │ ├── DepartmentTable.jsx
@@ -73,6 +74,7 @@ src
 ├── App.jsx
 ├── main.jsx
 └── index.css
+```
 
 ---
 

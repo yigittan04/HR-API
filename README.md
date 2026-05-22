@@ -7,6 +7,8 @@ Frontend: HTML, CSS, JavaScript
 Containerization: Docker  
 Testing: Pytest, HTTPX
 
+---
+
 # Features
 
 - JWT-based authentication
@@ -17,6 +19,8 @@ Testing: Pytest, HTTPX
 - Pagination support
 - Real-time UI updates
 - RESTful API architecture
+
+---
 
 # How to Run the HR API (English)
 
@@ -49,6 +53,8 @@ All changes are automatically saved to the database, and the UI updates in real-
 
 Use the following command to stop the project:
 > docker compose down
+
+---
 
 # Project Structure
 
@@ -112,6 +118,8 @@ hr_api
     └── conftest.py
 ```
 
+---
+
 # System Structure
 
 The backend follows a layered architecture to separate responsibilities and keep the code maintainable and scalable.
@@ -137,6 +145,8 @@ Repositories (Database Access)
 Database (PostgreSQL)
 ```
 
+---
+
 # Unit Testing
 
 Pytest is used for unit testing.
@@ -148,35 +158,51 @@ To run the tests, use the following commands:
 > docker exec -it hr_api bash
 > python3 -m pytest -v
 
+---
+
 ## Routers
 
 Routers define the HTTP endpoints.
 They receive requests from the frontend, validate input using schemas, and call the appropriate service functions.
+
+---
 
 ## Services
 
 Services contain the core business logic of the application.
 They process data and coordinate operations between routers and repositories.
 
+---
+
 ## Repositories
 
 Repositories are responsible for interacting with the database using SQLAlchemy.
+
+---
 
 ## Schemas
 
 Schemas define Pydantic models used for operations.
 
+---
+
 ## Models
 
 Models represent the database tables.
+
+---
 
 ## Dependencies
 
 Dependencies handle API key verification and database session injection.
 
+---
+
 ## Database Configuration
 
 Database configuration handles database connection, SQLAlchemy session creation and environment configuration.
+
+---
 
 ## A Request Example Flow
 
@@ -187,6 +213,7 @@ Database configuration handles database connection, SQLAlchemy session creation 
 5. Repository inserts the employee into PostgreSQL
 6. Response is returned to the client
 
+---
 
 # HR API Nasıl Çalıştırılır (Türkçe)
 
@@ -219,6 +246,8 @@ Yapılan tüm değişiklikler otomatik olarak veritabanına kaydedilir ve arayü
 
 Projeyi durdurmak için aşağıdaki komutu kullanabilirsiniz:
 > docker compose down
+
+---
 
 # Proje Mimarisi
 
@@ -282,6 +311,8 @@ hr_api
     └── conftest.py
 ```
 
+---
+
 # Sistem Mimarisi
 
 ```
@@ -300,6 +331,8 @@ Repositories (Database Access)
 Database (PostgreSQL)
 ```
 
+---
+
 # Birim Test
 
 Projede birim test için Pytest kullanılır.
@@ -311,35 +344,51 @@ Testleri çalıştırmak için aşağıdaki komutları kullanın:
 > docker exec -it hr_api bash
 > python3 -m pytest -v
 
+---
+
 ## Router'lar
 
 Router'lar HTTP endpointlerini tanımlar.
 Frontend'den gelen istekleri alır, schema'lar kullanarak input'ları doğrular ve uygun service fonksiyonlarını çağırır.
+
+---
 
 ## Servisler
 
 Servisler uygulamanın temel iş mantığını içerir.
 Verileri işler ve router ile repository katmanları arasındaki işlemleri koordine eder.
 
+---
+
 ## Repository'ler
 
 Repository'ler SQLAlchemy kullanarak veritabanı ile etkileşim kurmaktan sorumludur.
+
+---
 
 ## Schema'lar
 
 Schema'lar işlemler için kullanılan Pydantic modellerini tanımlar.
 
+---
+
 ## Modeller
 
 Modeller veritabanı tablolarını temsil eder.
+
+---
 
 ## Bağımlılıklar
 
 Dependencies API anahtarı doğrulamasını ve veritabanı oturumu enjeksiyonunu yönetir.
 
+---
+
 ## Veritabanı Yapılandırması
 
 Veritabanı yapılandırması veritabanı bağlantısını, SQLAlchemy oturumu oluşturmayı ve ortam yapılandırmasını yönetir.
+
+---
 
 ## Kullanım Örneği
 
@@ -350,3 +399,4 @@ Veritabanı yapılandırması veritabanı bağlantısını, SQLAlchemy oturumu o
 5. Repository çalışanı PostgreSQL veritabanına ekler
 6. Yanıt istemciye döndürülür
 
+---
